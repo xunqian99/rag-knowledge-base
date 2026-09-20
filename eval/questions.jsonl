@@ -1,0 +1,150 @@
+{"id":"q001","type":"direct","question":"工作时间是几点到几点?","answer":"每周一至周五 9:00 - 18:00,午休 12:00 - 13:30","source":"员工手册-节选.txt","keyPhrases":["工作时间","9:00"],"answerable":true}
+{"id":"q002","type":"direct","question":"弹性打卡允许的最晚到岗时间是几点?","answer":"10:00","source":"员工手册-节选.txt","keyPhrases":["弹性打卡","10:00"],"answerable":true}
+{"id":"q003","type":"direct","question":"每月累计迟到几次会取消全勤奖?","answer":"3 次","source":"员工手册-节选.txt","keyPhrases":["迟到","3 次","全勤奖"],"answerable":true}
+{"id":"q004","type":"direct","question":"单次迟到超过多长时间按事假处理?","answer":"60 分钟","source":"员工手册-节选.txt","keyPhrases":["迟到","60 分钟"],"answerable":true}
+{"id":"q005","type":"direct","question":"请假需要提前几个工作日提交申请?","answer":"1 个工作日","source":"员工手册-节选.txt","keyPhrases":["请假","1 个工作日"],"answerable":true}
+{"id":"q006","type":"direct","question":"病假需要提供什么级别的医院证明?","answer":"二级以上医院","source":"员工手册-节选.txt","keyPhrases":["病假","二级以上医院"],"answerable":true}
+{"id":"q007","type":"direct","question":"年假需要提前几个工作日申请?","answer":"3 个工作日","source":"员工手册-节选.txt","keyPhrases":["年假","3 个工作日"],"answerable":true}
+{"id":"q008","type":"direct","question":"市内交通报销单次上限是多少?","answer":"不超过 100 元","source":"员工手册-节选.txt","keyPhrases":["市内交通","100 元"],"answerable":true}
+{"id":"q009","type":"direct","question":"出差餐补的标准是多少?","answer":"每人每天 100 元","source":"员工手册-节选.txt","keyPhrases":["出差餐补","100 元"],"answerable":true}
+{"id":"q010","type":"direct","question":"报销单据需要在费用发生后多少天内提交?","answer":"30 个自然日","source":"员工手册-节选.txt","keyPhrases":["报销单据","30 个自然日"],"answerable":true}
+{"id":"q011","type":"direct","question":"每月的报销截止日是几号?","answer":"每月 25 日","source":"员工手册-节选.txt","keyPhrases":["25 日","报销截止日"],"answerable":true}
+{"id":"q012","type":"direct","question":"单笔 1000 元以下的报销由谁审批?","answer":"直属主管","source":"员工手册-节选.txt","keyPhrases":["1000 元","直属主管"],"answerable":true}
+{"id":"q013","type":"direct","question":"5000 元以上的报销需要谁审批?","answer":"财务总监","source":"员工手册-节选.txt","keyPhrases":["5000 元","财务总监"],"answerable":true}
+{"id":"q014","type":"direct","question":"电子发票需要提供什么形式的文件?","answer":"PDF 原件","source":"员工手册-节选.txt","keyPhrases":["电子发票","PDF"],"answerable":true}
+{"id":"q015","type":"direct","question":"域账号密码最少需要多少位?","answer":"12 位","source":"员工手册-节选.txt","keyPhrases":["密码","12 位"],"answerable":true}
+{"id":"q016","type":"direct","question":"域账号密码多久强制更换一次?","answer":"90 天","source":"员工手册-节选.txt","keyPhrases":["密码","90 天"],"answerable":true}
+{"id":"q017","type":"direct","question":"常规 IT 工单的响应时间是多久?","answer":"4 小时内","source":"员工手册-节选.txt","keyPhrases":["常规工单","4 小时"],"answerable":true}
+{"id":"q018","type":"direct","question":"紧急 IT 工单的响应时间是多久?","answer":"30 分钟内","source":"员工手册-节选.txt","keyPhrases":["紧急工单","30 分钟"],"answerable":true}
+{"id":"q019","type":"direct","question":"IT 故障报修的紧急内线号码是多少?","answer":"内线 8000","source":"员工手册-节选.txt","keyPhrases":["内线","8000"],"answerable":true}
+{"id":"q020","type":"direct","question":"单笔采购超过多少金额需要至少 3 家供应商报价?","answer":"20000 元","source":"员工手册-节选.txt","keyPhrases":["20000 元","3 家供应商"],"answerable":true}
+{"id":"q021","type":"direct","question":"长期合作供应商多久需要重新评估一次资质?","answer":"每年一次","source":"员工手册-节选.txt","keyPhrases":["供应商","每年重新评估"],"answerable":true}
+{"id":"q022","type":"direct","question":"采购验收合格后几个工作日内要提交付款申请?","answer":"5 个工作日","source":"员工手册-节选.txt","keyPhrases":["验收合格","5 个工作日"],"answerable":true}
+{"id":"q023","type":"direct","question":"采购付款的默认账期是多少天?","answer":"30 天","source":"员工手册-节选.txt","keyPhrases":["付款账期","30 天"],"answerable":true}
+{"id":"q024","type":"direct","question":"出差需要提前几个工作日提交申请?","answer":"2 个工作日","source":"星海科技差旅管理办法.pdf","keyPhrases":["出差申请","2 个工作日"],"answerable":true}
+{"id":"q025","type":"direct","question":"出国出差需要谁额外审批?","answer":"总经理","source":"星海科技差旅管理办法.pdf","keyPhrases":["出国出差","总经理审批"],"answerable":true}
+{"id":"q026","type":"direct","question":"高铁单程几小时以内的行程原则上乘坐二等座?","answer":"4 小时以内","source":"星海科技差旅管理办法.pdf","keyPhrases":["高铁","4 小时"],"answerable":true}
+{"id":"q027","type":"direct","question":"自驾出差每公里补贴多少钱?","answer":"每公里 1.2 元","source":"星海科技差旅管理办法.pdf","keyPhrases":["自驾","1.2 元"],"answerable":true}
+{"id":"q028","type":"direct","question":"一线城市出差住宿每晚上限是多少?","answer":"500 元","source":"星海科技差旅管理办法.pdf","keyPhrases":["一线城市","500 元"],"answerable":true}
+{"id":"q029","type":"direct","question":"二线城市出差住宿每晚上限是多少?","answer":"350 元","source":"星海科技差旅管理办法.pdf","keyPhrases":["二线城市","350 元"],"answerable":true}
+{"id":"q030","type":"direct","question":"其他城市出差住宿每晚上限是多少?","answer":"250 元","source":"星海科技差旅管理办法.pdf","keyPhrases":["其他城市","250 元"],"answerable":true}
+{"id":"q031","type":"direct","question":"出差补贴不足一天的部分怎么计算?","answer":"按一天计","source":"星海科技差旅管理办法.pdf","keyPhrases":["不足一天","按一天计"],"answerable":true}
+{"id":"q032","type":"direct","question":"出差结束后几个工作日内提交报销单据?","answer":"5 个工作日","source":"星海科技差旅管理办法.pdf","keyPhrases":["出差结束","5 个工作日"],"answerable":true}
+{"id":"q033","type":"direct","question":"虚报差旅行程会有什么后果?","answer":"全额追回报销款并记入个人诚信档案","source":"星海科技差旅管理办法.pdf","keyPhrases":["虚报","诚信档案"],"answerable":true}
+{"id":"q034","type":"direct","question":"住宿超标的费用由谁承担?","answer":"由个人承担","source":"星海科技差旅管理办法.pdf","keyPhrases":["住宿超标","个人承担"],"answerable":true}
+{"id":"q035","type":"direct","question":"IT 服务台的热线内线号码是多少?","answer":"内线 8000","source":"星海科技IT服务管理办法.docx","keyPhrases":["服务台热线","8000"],"answerable":true}
+{"id":"q036","type":"direct","question":"IT 服务台的服务时间是什么时候?","answer":"工作日 9:00 - 18:00","source":"星海科技IT服务管理办法.docx","keyPhrases":["服务台热线","9:00"],"answerable":true}
+{"id":"q037","type":"direct","question":"工单关闭后多少天内可以重新打开?","answer":"7 天","source":"星海科技IT服务管理办法.docx","keyPhrases":["工单关闭","7 天"],"answerable":true}
+{"id":"q038","type":"direct","question":"连续输错几次密码账号会被锁定?","answer":"5 次","source":"星海科技IT服务管理办法.docx","keyPhrases":["5 次","锁定"],"answerable":true}
+{"id":"q039","type":"direct","question":"账号被锁定后多长时间自动解锁?","answer":"30 分钟","source":"星海科技IT服务管理办法.docx","keyPhrases":["锁定","30 分钟"],"answerable":true}
+{"id":"q040","type":"direct","question":"访客网开通后的有效期是多久?","answer":"8 小时","source":"星海科技IT服务管理办法.docx","keyPhrases":["访客网","8 小时"],"answerable":true}
+{"id":"q041","type":"direct","question":"VPN 账号连续多少天未使用会自动停用?","answer":"30 天","source":"星海科技IT服务管理办法.docx","keyPhrases":["VPN","30 天"],"answerable":true}
+{"id":"q042","type":"direct","question":"设备遗失后需要在多久内报备?","answer":"24 小时","source":"星海科技IT服务管理办法.docx","keyPhrases":["设备遗失","24 小时"],"answerable":true}
+{"id":"q043","type":"direct","question":"笔记本电脑使用满几年可以申请更换?","answer":"4 年","source":"星海科技IT服务管理办法.docx","keyPhrases":["笔记本","4 年"],"answerable":true}
+{"id":"q044","type":"direct","question":"发生数据泄漏事件需在多久内上报?","answer":"1 小时","source":"星海科技IT服务管理办法.docx","keyPhrases":["数据泄漏","1 小时"],"answerable":true}
+{"id":"q045","type":"direct","question":"公司数据分为哪几个级别?","answer":"公开、内部、机密","source":"星海科技IT服务管理办法.docx","keyPhrases":["公开","内部","机密"],"answerable":true}
+{"id":"q046","type":"direct","question":"采购申请需要提前几个工作日提交?","answer":"5 个工作日","source":"星海科技采购管理制度.pdf","keyPhrases":["采购申请","5 个工作日"],"answerable":true}
+{"id":"q047","type":"direct","question":"年度采购计划需要在什么时候前提交?","answer":"上一年度 12 月 31 日前","source":"星海科技采购管理制度.pdf","keyPhrases":["年度采购计划","12 月 31 日"],"answerable":true}
+{"id":"q048","type":"direct","question":"采购合同签署前需要经过哪个部门审核?","answer":"法务","source":"星海科技采购管理制度.pdf","keyPhrases":["采购合同","法务审核"],"answerable":true}
+{"id":"q049","type":"direct","question":"合同金额超过多少需要总经理审批?","answer":"10 万元","source":"星海科技采购管理制度.pdf","keyPhrases":["10 万元","总经理审批"],"answerable":true}
+{"id":"q050","type":"direct","question":"预付款比例原则上不超过合同金额的多少?","answer":"30%","source":"星海科技采购管理制度.pdf","keyPhrases":["预付款","30%"],"answerable":true}
+{"id":"q051","type":"direct","question":"验收不合格的物品需要在几个工作日内退回?","answer":"3 个工作日","source":"星海科技采购管理制度.pdf","keyPhrases":["验收不合格","3 个工作日"],"answerable":true}
+{"id":"q052","type":"direct","question":"验收记录需要存档保存不少于多久?","answer":"3 年","source":"星海科技采购管理制度.pdf","keyPhrases":["验收记录","3 年"],"answerable":true}
+{"id":"q053","type":"direct","question":"拆分采购金额以规避审批属于什么行为?","answer":"视同违规","source":"星海科技采购管理制度.pdf","keyPhrases":["拆分采购金额","视同违规"],"answerable":true}
+{"id":"q054","type":"direct","question":"收受供应商回扣会有什么后果?","answer":"解除劳动合同并追究法律责任","source":"星海科技采购管理制度.pdf","keyPhrases":["收受供应商回扣","解除劳动合同"],"answerable":true}
+{"id":"q055","type":"direct","question":"供应商评估包含哪几个维度?","answer":"价格、交付准时率、质量合格率与售后响应速度","source":"星海科技采购管理制度.pdf","keyPhrases":["评估维度","售后响应速度"],"answerable":true}
+{"id":"q056","type":"direct","question":"新员工报到时间是入职当日几点?","answer":"上午 9:30","source":"星海科技新员工入职指南.txt","keyPhrases":["报到时间","9:30"],"answerable":true}
+{"id":"q057","type":"direct","question":"报到需要携带哪些证件?","answer":"身份证原件、学历证书原件、离职证明与银行卡复印件","source":"星海科技新员工入职指南.txt","keyPhrases":["身份证原件","学历证书原件"],"answerable":true}
+{"id":"q058","type":"direct","question":"入职材料不齐需要在几个工作日内补齐?","answer":"15 个工作日","source":"星海科技新员工入职指南.txt","keyPhrases":["15 个工作日","补齐"],"answerable":true}
+{"id":"q059","type":"direct","question":"新员工试用期一般是多长时间?","answer":"3 个月","source":"星海科技新员工入职指南.txt","keyPhrases":["试用期为 3 个月"],"answerable":true}
+{"id":"q060","type":"direct","question":"试用期工资是转正后工资的多少比例?","answer":"80%","source":"星海科技新员工入职指南.txt","keyPhrases":["试用期工资","80%"],"answerable":true}
+{"id":"q061","type":"direct","question":"新员工入职培训为期几天?","answer":"3 天","source":"星海科技新员工入职指南.txt","keyPhrases":["入职培训","3 天"],"answerable":true}
+{"id":"q062","type":"direct","question":"入职培训考核多少分及格?","answer":"80 分","source":"星海科技新员工入职指南.txt","keyPhrases":["80 分","及格"],"answerable":true}
+{"id":"q063","type":"direct","question":"导师补贴是多少钱?","answer":"每月 500 元","source":"星海科技新员工入职指南.txt","keyPhrases":["导师补贴","500 元"],"answerable":true}
+{"id":"q064","type":"direct","question":"导师的带教奖金是多少?","answer":"1000 元","source":"星海科技新员工入职指南.txt","keyPhrases":["带教奖金","1000 元"],"answerable":true}
+{"id":"q065","type":"direct","question":"转正申请需要在试用期结束前几个工作日提交?","answer":"10 个工作日","source":"星海科技新员工入职指南.txt","keyPhrases":["转正申请","10 个工作日"],"answerable":true}
+{"id":"q066","type":"paraphrase","question":"打车费能报销吗?","answer":"市内交通凭发票实报实销,单次不超过 100 元","source":"员工手册-节选.txt","keyPhrases":["市内交通","100 元"],"answerable":true}
+{"id":"q067","type":"paraphrase","question":"上班可以晚一点到吗?","answer":"可以,弹性打卡允许 8:30 - 10:00 之间到岗,但每日在岗需满 8 小时","source":"员工手册-节选.txt","keyPhrases":["弹性打卡","10:00"],"answerable":true}
+{"id":"q068","type":"paraphrase","question":"报销拖着一直不交会怎么样?","answer":"超过 30 个自然日不予受理","source":"员工手册-节选.txt","keyPhrases":["超期不予受理"],"answerable":true}
+{"id":"q069","type":"paraphrase","question":"发票抬头应该写什么?","answer":"星海科技有限公司,税号需填写完整","source":"员工手册-节选.txt","keyPhrases":["发票抬头","星海科技有限公司"],"answerable":true}
+{"id":"q070","type":"paraphrase","question":"手写或者定额发票能报吗?","answer":"不接受定额发票与手写发票","source":"员工手册-节选.txt","keyPhrases":["不接受","手写发票"],"answerable":true}
+{"id":"q071","type":"paraphrase","question":"出差什么时候可以坐飞机?","answer":"单程超过 4 小时,或高铁耗时超过 6 小时,可乘经济舱","source":"星海科技差旅管理办法.pdf","keyPhrases":["飞机","经济舱"],"answerable":true}
+{"id":"q072","type":"paraphrase","question":"两个同事一起出差,住宿怎么安排?","answer":"同性别同事同行原则上应合住标准间","source":"星海科技差旅管理办法.pdf","keyPhrases":["同性别","合住标准间"],"answerable":true}
+{"id":"q073","type":"paraphrase","question":"忘记提交出差申请就出发了,补贴还能补吗?","answer":"未按规定提交申请的,不予补报差旅补贴","source":"星海科技差旅管理办法.pdf","keyPhrases":["未按规定提交出差申请","不予补报"],"answerable":true}
+{"id":"q074","type":"paraphrase","question":"在家办公怎么连上公司的系统?","answer":"需通过 VPN 接入,VPN 账号需单独申请","source":"星海科技IT服务管理办法.docx","keyPhrases":["远程办公","VPN"],"answerable":true}
+{"id":"q075","type":"paraphrase","question":"离职的时候公司发的电脑要还吗?","answer":"需要归还全部公司设备,未归还将暂缓办理离职手续","source":"星海科技IT服务管理办法.docx","keyPhrases":["离职时","归还全部公司设备"],"answerable":true}
+{"id":"q076","type":"paraphrase","question":"电脑丢了要赔钱吗?","answer":"需在 24 小时内报备,并按设备折旧价赔偿","source":"星海科技IT服务管理办法.docx","keyPhrases":["设备遗失","折旧价"],"answerable":true}
+{"id":"q077","type":"paraphrase","question":"访客来公司怎么上网?","answer":"需在前台登记后开通访客网,有效期 8 小时","source":"星海科技IT服务管理办法.docx","keyPhrases":["访客网","前台登记"],"answerable":true}
+{"id":"q078","type":"paraphrase","question":"供应商老是延期交货会怎么样?","answer":"连续两次评估不合格将移出合格供应商名录","source":"星海科技采购管理制度.pdf","keyPhrases":["连续两次","移出合格供应商名录"],"answerable":true}
+{"id":"q079","type":"paraphrase","question":"没做比价就直接采购了会怎样?","answer":"未按规定比价的采购,财务有权拒绝付款","source":"星海科技采购管理制度.pdf","keyPhrases":["未按规定比价","拒绝付款"],"answerable":true}
+{"id":"q080","type":"paraphrase","question":"入职当天要签哪些文件?","answer":"劳动合同、保密协议与竞业限制协议","source":"星海科技新员工入职指南.txt","keyPhrases":["保密协议","竞业限制协议"],"answerable":true}
+{"id":"q081","type":"paraphrase","question":"入职培训没考过怎么办?","answer":"补考一次,仍不通过的延长试用期 1 个月","source":"星海科技新员工入职指南.txt","keyPhrases":["补考","延长试用期 1 个月"],"answerable":true}
+{"id":"q082","type":"paraphrase","question":"谁负责带新人熟悉工作?","answer":"每位新员工在试用期内配备一名导师,每周进行一次一对一沟通","source":"星海科技新员工入职指南.txt","keyPhrases":["导师","一对一沟通"],"answerable":true}
+{"id":"q083","type":"paraphrase","question":"机密文件怎么发给外部人员?","answer":"使用加密压缩包,解压密码通过其他渠道单独告知","source":"星海科技IT服务管理办法.docx","keyPhrases":["加密压缩包","单独告知"],"answerable":true}
+{"id":"q084","type":"paraphrase","question":"公司配的笔记本用几年可以换新的?","answer":"使用满 4 年可申请更换","source":"星海科技IT服务管理办法.docx","keyPhrases":["笔记本","4 年"],"answerable":true}
+{"id":"q085","type":"paraphrase","question":"出差期间吃饭有补助吗?","answer":"出差餐补每人每天 100 元,无需发票","source":"星海科技差旅管理办法.pdf","keyPhrases":["出差餐补","100 元"],"answerable":true}
+{"id":"q086","type":"paraphrase","question":"出差住宿费最多能报多少?","answer":"一线城市 500 元、二线城市 350 元、其他城市 250 元","source":"星海科技差旅管理办法.pdf","keyPhrases":["住宿","500 元"],"answerable":true}
+{"id":"q087","type":"paraphrase","question":"公司对密码复杂度有什么要求?","answer":"长度不少于 12 位,必须包含大小写字母、数字与特殊字符","source":"星海科技IT服务管理办法.docx","keyPhrases":["12 位","特殊字符"],"answerable":true}
+{"id":"q088","type":"paraphrase","question":"新密码可以用以前用过的吗?","answer":"不得与前 5 次使用的密码重复","source":"星海科技IT服务管理办法.docx","keyPhrases":["前 5 次"],"answerable":true}
+{"id":"q089","type":"paraphrase","question":"采购金额比较大时需要先比价吗?","answer":"单笔超过 20000 元需至少取得 3 家供应商报价","source":"星海科技采购管理制度.pdf","keyPhrases":["20000 元","比价"],"answerable":true}
+{"id":"q090","type":"paraphrase","question":"合同签了之后多久付款?","answer":"付款账期默认为货到验收后 30 天","source":"星海科技采购管理制度.pdf","keyPhrases":["付款账期","30 天"],"answerable":true}
+{"id":"q091","type":"paraphrase","question":"试用期考核没过会怎么样?","answer":"公司可提前 3 天通知解除劳动合同","source":"星海科技新员工入职指南.txt","keyPhrases":["考核不合格","3 天通知"],"answerable":true}
+{"id":"q092","type":"paraphrase","question":"转正主要看哪些方面?","answer":"工作成果、专业能力、团队协作与文化契合","source":"星海科技新员工入职指南.txt","keyPhrases":["工作成果","文化契合"],"answerable":true}
+{"id":"q093","type":"paraphrase","question":"出差申请要走在哪个系统里?","answer":"OA 系统","source":"星海科技差旅管理办法.pdf","keyPhrases":["OA 系统","出差申请"],"answerable":true}
+{"id":"q094","type":"paraphrase","question":"临时出差来不及走流程怎么办?","answer":"可先电话报备,返回后 3 个工作日内补交申请单","source":"星海科技差旅管理办法.pdf","keyPhrases":["紧急出差","电话报备"],"answerable":true}
+{"id":"q095","type":"paraphrase","question":"出差回来多久之内要交报销单?","answer":"5 个工作日内","source":"星海科技差旅管理办法.pdf","keyPhrases":["出差结束","5 个工作日"],"answerable":true}
+{"id":"q096","type":"paraphrase","question":"报销单分别由谁审批?","answer":"1000 元以下直属主管,1000 至 5000 元部门负责人,5000 元以上财务总监","source":"员工手册-节选.txt","keyPhrases":["1000 元","财务总监"],"answerable":true}
+{"id":"q097","type":"paraphrase","question":"每个月什么时候报销就截止了?","answer":"每月 25 日","source":"员工手册-节选.txt","keyPhrases":["25 日","报销截止日"],"answerable":true}
+{"id":"q098","type":"paraphrase","question":"提采购需求要提前多久?","answer":"提前 5 个工作日提交","source":"星海科技采购管理制度.pdf","keyPhrases":["采购申请","5 个工作日"],"answerable":true}
+{"id":"q099","type":"paraphrase","question":"紧急采购怎么处理?","answer":"需由部门负责人书面说明理由","source":"星海科技采购管理制度.pdf","keyPhrases":["紧急采购","书面说明理由"],"answerable":true}
+{"id":"q100","type":"paraphrase","question":"成为供应商需要提供哪些资料?","answer":"营业执照、开户许可证与相关资质证明","source":"星海科技采购管理制度.pdf","keyPhrases":["营业执照","开户许可证"],"answerable":true}
+{"id":"q101","type":"paraphrase","question":"入职培训都讲些什么?","answer":"公司介绍、规章制度与信息安全","source":"星海科技新员工入职指南.txt","keyPhrases":["公司介绍","信息安全"],"answerable":true}
+{"id":"q102","type":"paraphrase","question":"转正的结果有哪几种?","answer":"通过、延长试用期与不予转正","source":"星海科技新员工入职指南.txt","keyPhrases":["延长试用期","不予转正"],"answerable":true}
+{"id":"q103","type":"paraphrase","question":"提交 IT 工单后多久会有人响应?","answer":"紧急 30 分钟、高优先级 2 小时、普通 4 小时","source":"星海科技IT服务管理办法.docx","keyPhrases":["紧急工单","30 分钟"],"answerable":true}
+{"id":"q104","type":"paraphrase","question":"IT 服务台的服务时间是几点到几点?","answer":"工作日 9:00 - 18:00","source":"星海科技IT服务管理办法.docx","keyPhrases":["服务台热线","9:00"],"answerable":true}
+{"id":"q105","type":"paraphrase","question":"系统的操作权限怎么申请?","answer":"填写权限申请表,由直属主管与系统负责人双重审批","source":"星海科技IT服务管理办法.docx","keyPhrases":["权限申请表","双重审批"],"answerable":true}
+{"id":"q106","type":"precise","question":"出差申请需提前几个工作日在 OA 系统提交?","answer":"2 个工作日","source":"星海科技差旅管理办法.pdf","keyPhrases":["OA 系统","2 个工作日"],"answerable":true}
+{"id":"q107","type":"precise","question":"出国出差需要提前几个工作日发起申请?","answer":"10 个工作日","source":"星海科技差旅管理办法.pdf","keyPhrases":["出国出差","10 个工作日"],"answerable":true}
+{"id":"q108","type":"precise","question":"紧急出差返回后几个工作日内补交申请单?","answer":"3 个工作日","source":"星海科技差旅管理办法.pdf","keyPhrases":["紧急出差","3 个工作日"],"answerable":true}
+{"id":"q109","type":"precise","question":"乘坐高铁耗时超过几小时可改乘飞机?","answer":"6 小时","source":"星海科技差旅管理办法.pdf","keyPhrases":["6 小时","经济舱"],"answerable":true}
+{"id":"q110","type":"precise","question":"IT 工单优先级分为哪三级?","answer":"紧急、高、普通","source":"星海科技IT服务管理办法.docx","keyPhrases":["紧急","普通"],"answerable":true}
+{"id":"q111","type":"precise","question":"高优先级工单几个小时内响应?","answer":"2 小时","source":"星海科技IT服务管理办法.docx","keyPhrases":["高优先级","2 小时"],"answerable":true}
+{"id":"q112","type":"precise","question":"密码不得与前几次使用的密码重复?","answer":"前 5 次","source":"星海科技IT服务管理办法.docx","keyPhrases":["前 5 次"],"answerable":true}
+{"id":"q113","type":"precise","question":"申请系统权限需要谁审批?","answer":"直属主管与系统负责人双重审批","source":"星海科技IT服务管理办法.docx","keyPhrases":["权限申请表","双重审批"],"answerable":true}
+{"id":"q114","type":"precise","question":"访客网需要在哪里登记?","answer":"前台","source":"星海科技IT服务管理办法.docx","keyPhrases":["访客网","前台登记"],"answerable":true}
+{"id":"q115","type":"precise","question":"供应商评估包含哪些维度?","answer":"价格、交付准时率、质量合格率与售后响应速度","source":"星海科技采购管理制度.pdf","keyPhrases":["评估维度","售后响应速度"],"answerable":true}
+{"id":"q116","type":"precise","question":"连续几次评估不合格会被移出供应商名录?","answer":"两次","source":"星海科技采购管理制度.pdf","keyPhrases":["连续两次","移出合格供应商名录"],"answerable":true}
+{"id":"q117","type":"precise","question":"采购合同金额超过多少需要总经理审批?","answer":"10 万元","source":"星海科技采购管理制度.pdf","keyPhrases":["10 万元","总经理审批"],"answerable":true}
+{"id":"q118","type":"precise","question":"预付款比例的上限是多少?","answer":"30%","source":"星海科技采购管理制度.pdf","keyPhrases":["预付款","30%"],"answerable":true}
+{"id":"q119","type":"precise","question":"入职培训考核满分多少分?","answer":"100 分","source":"星海科技新员工入职指南.txt","keyPhrases":["满分 100 分"],"answerable":true}
+{"id":"q120","type":"precise","question":"导师与新员工多久沟通一次?","answer":"每周一次","source":"星海科技新员工入职指南.txt","keyPhrases":["每周进行一次一对一沟通"],"answerable":true}
+{"id":"q121","type":"precise","question":"验收记录需要存档保存不少于几年?","answer":"3 年","source":"星海科技采购管理制度.pdf","keyPhrases":["验收记录","3 年"],"answerable":true}
+{"id":"q122","type":"precise","question":"转正评估由哪几方共同完成?","answer":"直属主管、导师与人力资源部三方","source":"星海科技新员工入职指南.txt","keyPhrases":["人力资源部","三方共同完成"],"answerable":true}
+{"id":"q123","type":"precise","question":"新员工试用期是多长时间?","answer":"3 个月","source":"星海科技新员工入职指南.txt","keyPhrases":["试用期为 3 个月"],"answerable":true}
+{"id":"q124","type":"precise","question":"试用期工资是转正后工资的百分之多少?","answer":"80%","source":"星海科技新员工入职指南.txt","keyPhrases":["试用期工资","80%"],"answerable":true}
+{"id":"q125","type":"precise","question":"入职培训考核多少分算及格?","answer":"80 分","source":"星海科技新员工入职指南.txt","keyPhrases":["80 分","及格"],"answerable":true}
+{"id":"q126","type":"precise","question":"试用期考核不合格,公司需提前几天通知解除劳动合同?","answer":"3 天","source":"星海科技新员工入职指南.txt","keyPhrases":["3 天通知"],"answerable":true}
+{"id":"q127","type":"precise","question":"竞业限制协议适用于哪类岗位?","answer":"核心岗位","source":"星海科技新员工入职指南.txt","keyPhrases":["竞业限制协议","核心岗位"],"answerable":true}
+{"id":"q128","type":"precise","question":"IT 工单关闭后多少天内可以重新打开?","answer":"7 天","source":"星海科技IT服务管理办法.docx","keyPhrases":["工单关闭","7 天"],"answerable":true}
+{"id":"q129","type":"precise","question":"IT 服务台热线的内线号码是多少?","answer":"8000","source":"星海科技IT服务管理办法.docx","keyPhrases":["服务台热线","8000"],"answerable":true}
+{"id":"q130","type":"precise","question":"公司设备遗失需要在几小时内报备?","answer":"24 小时","source":"星海科技IT服务管理办法.docx","keyPhrases":["设备遗失","24 小时"],"answerable":true}
+{"id":"q131","type":"unanswerable","question":"公司的年会什么时候举行?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q132","type":"unanswerable","question":"公司有股票期权或者员工持股计划吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q133","type":"unanswerable","question":"员工健身房在哪里?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q134","type":"unanswerable","question":"公司提供通勤班车吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q135","type":"unanswerable","question":"住房补贴的标准是多少?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q136","type":"unanswerable","question":"员工子女教育补助怎么申请?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q137","type":"unanswerable","question":"公司的年假一共有多少天?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q138","type":"unanswerable","question":"生育津贴怎么申领?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q139","type":"unanswerable","question":"公司提供心理咨询服务吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q140","type":"unanswerable","question":"中午吃饭有额外的餐补吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q141","type":"unanswerable","question":"员工体检多久安排一次?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q142","type":"unanswerable","question":"出差可以带家属同行吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q143","type":"unanswerable","question":"每周可以申请几天远程办公?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q144","type":"unanswerable","question":"年终奖是怎么计算的?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q145","type":"unanswerable","question":"内部推荐人才有奖励吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q146","type":"unanswerable","question":"公司有托儿所或者母婴室吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q147","type":"unanswerable","question":"加班之后怎么调休?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q148","type":"unanswerable","question":"员工可以申请无息购房贷款吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q149","type":"unanswerable","question":"公司食堂的开放时间是什么时候?","answer":null,"source":null,"keyPhrases":[],"answerable":false}
+{"id":"q150","type":"unanswerable","question":"公司有员工互助基金吗?","answer":null,"source":null,"keyPhrases":[],"answerable":false}

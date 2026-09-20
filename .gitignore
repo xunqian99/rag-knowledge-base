@@ -1,0 +1,38 @@
+# 环境变量:含密码,绝不提交
+.env
+
+# 本地私有配置:含 API Key,绝不提交
+application-local.yml
+**/application-local.yml
+
+# Java / Maven 构建产物
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# 原始文档与本地数据
+data/
+uploads/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# Playwright CLI 的临时产物(页面快照、控制台日志、截图)
+.playwright-cli/
+
+# 前端构建产物与依赖
+node_modules/
+web/dist/
+
+# 本地下载的安装包 —— 体积大,而且属于环境准备,不属于项目本身。
+# GitHub 对单文件有 100MB 的硬限制,传上去会被直接拒绝。
+*.msi
+*.exe
+*.zip

@@ -1,0 +1,206 @@
+# ============================================================
+# 应用配置
+#
+# 【重要】yml 用冒号 + 缩进表达层级,不是 properties 那种等号写法。
+# 写成 spring.application.name=rag-server 这种形式,Spring Boot 是读不到的。
+# ============================================================
+
+spring:
+  application:
+    name: rag-server
+
+  # ---------------- PostgreSQL ----------------
+  # ${变量名:默认值} 的写法:优先读环境变量,读不到就用冒号后面的默认值。
+  # 好处:密码不硬编码在代码仓库里,生产环境用环境变量注入即可。
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:rag}
+    username: ${DB_USER:rag}
+    password: ${DB_PASSWORD:rag123456}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # 连接池上限。不是越大越好——数据库能承受的连接数有限,
+      # 连接开太多反而会互相抢资源。单机学生项目 10 足够。
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      # 【关键决策】不用 JPA 自动建表。
+      # 因为分块表里有 vector 类型字段,JPA/Hibernate 不认识它,
+      # 自动建表会漏字段甚至直接失败。表结构改由手写 SQL 管理(第 3 项)。
+      ddl-auto: none
+    # 关掉 OSIV。开着的话,数据库连接会一直被持有到 HTTP 响应结束,
+    # 高并发下连接池瞬间被打满。这是个很常见的面试考点。
+    open-in-view: false
+    show-sql: true
+
+  # ---------------- Flyway(表结构版本管理) ----------------
+  # 应用启动时会扫描下面的目录,把「还没执行过」的 SQL 脚本按版本号顺序执行一遍,
+  # 并在数据库的 flyway_schema_history 表里记账。执行过的不会重复执行。
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    # 显式指定 UTF-8。SQL 脚本里有中文注释,编码不对会变成乱码。
+    encoding: UTF-8
+    # 启动时校验已执行的脚本有没有被改动过。改历史脚本会导致校验失败,
+    # 这是 Flyway 在逼你「只新增、不修改」,保证任何环境下执行顺序一致。
+    validate-on-migrate: true
+
+  # ---------------- 文件上传 ----------------
+  # Spring Boot 的默认值是单文件 1MB、单请求 10MB。
+  # 不改的话,传一个几 MB 的 PDF 就会直接报 MaxUploadSizeExceededException,
+  # 这是新手最常踩的坑之一。
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  # ---------------- Redis ----------------
+  # 注意:Spring Boot 3 的配置前缀是 spring.data.redis,
+  # 2.x 时代是 spring.redis,网上老教程经常写错。
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 3s
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+server:
+  port: 8080
+
+# ---------------- 业务自定义配置 ----------------
+# 业务配置放在自己的前缀下,不要往 spring.* 里塞。
+# 好处是不会和框架配置混淆,出问题时一眼能看出这是项目自己的开关。
+rag:
+  storage:
+    # 文件存储根目录,相对于应用的运行目录
+    root: uploads
+    # 允许上传的扩展名白名单
+    allowed-extensions:
+      - txt
+      - pdf
+      - docx
+      - xlsx
+    # 解析出的文本长度上限(字符数)。防止「解压炸弹」把内存撑爆。
+    max-text-length: 5000000
+
+  # ---------------- 分块策略 ----------------
+  chunking:
+    # 不足这个长度的相邻段落会合并(太短的块缺少上下文)。
+    # 实测在这份语料上 min 不起作用 —— 每个章节的正文字数都超过它,没有可合并的对象。
+    min-size: 60
+    # 超过这个长度的段会拆开(太大的块里混了多个主题,检索精度下降)。
+    #
+    # 这个值是第 20 项的实验结论,不是拍脑袋定的(同一套 130 题评测集):
+    #   max=500 -> 35 块   Hit@1=96.9%  MRR=0.9833
+    #   max=120 -> 45 块   Hit@1=98.5%  MRR=0.9923   <- 最优
+    #   max=50  -> 107 块  Hit@1=96.2%  MRR=0.9769
+    # 太粗和太细都更差,中粒度最好。详见决策记录 020。
+    max-size: 120
+    # 相邻块的重叠字符数。第 20 项实测在本语料上对指标没有影响,保持关闭。
+    overlap: 0
+    # 判定为标题的最大长度
+    max-heading-length: 40
+
+  # ---------------- 召回 ----------------
+  retrieval:
+    # 每一路召回的条数。召回要"宁可多召回不可漏",精排再从这里面挑。
+    recall-size: 50
+    # RRF 融合的平滑常数 k。60 是原论文推荐值,对它的取值不敏感。
+    rrf-k: 60
+
+  # ---------------- 重排序(精排) ----------------
+  # 走硅基流动的 API。密钥同样放在 application-local.yml 里。
+  rerank:
+    base-url: https://api.siliconflow.cn/v1
+    api-key: ${SILICONFLOW_API_KEY:}
+    # 文本重排的事实标准,568M 参数,中文表现好,快且便宜
+    model: BAAI/bge-reranker-v2-m3
+    # 送去精排的最大候选数。精排最贵最慢,必须设上限。
+    candidate-limit: 20
+    timeout: 30s
+
+  # ---------------- 问答缓存 ----------------
+  cache:
+    # 总开关。想看"关掉缓存"的效果时设成 false。
+    enabled: true
+    # 缓存有效期 1 小时
+    ttl: 1h
+    key-prefix: rag:qa
+
+  # ---------------- 线程池 ----------------
+  thread-pool:
+    chat-stream:
+      core-size: 4
+      max-size: 16
+      # 队列有上限:超载时快速失败,而不是无限堆积到 OOM
+      queue-capacity: 100
+    health-check:
+      core-size: 4
+      max-size: 8
+      # 健康检查调用频繁,队列要小 —— 排久了结果就失去意义了
+      queue-capacity: 20
+    keep-alive-seconds: 60
+
+  # ---------------- 向量模型 ----------------
+  # 百度千帆 v2 走 OpenAI 兼容协议,所以直接用 LangChain4j 的 OpenAI 客户端。
+  embedding:
+    base-url: https://qianfan.baidubce.com/v2
+    # 密钥不写在这里。从环境变量读,读不到就说明没配置。
+    # 本地开发时把密钥填在 application-local.yml 里(该文件已加入 .gitignore)。
+    api-key: ${QIANFAN_API_KEY:}
+    model: bge-large-zh
+    # 向量维度。第 3 项建表时就是按这个数字定的 vector(1024),
+    # 必须与模型实际输出一致,第一次调用时会校验。
+    dimension: 1024
+    # 一次请求带多少个文本。批量调用能显著减少网络往返次数。
+    batch-size: 16
+    timeout: 30s
+    max-retries: 2
+
+  health:
+    # 单个依赖的探测超时(毫秒)。超过这个时间没返回就判为 DOWN。
+    timeout-ms: 2000
+
+  # ---------------- Elasticsearch ----------------
+  elasticsearch:
+    # 本地跑是 localhost,容器里跑要用服务名(见 docker-compose.yml)
+    uri: ${ES_URI:http://localhost:9200}
+    # 分块的索引名。用带版本号的别名式命名,以后重建索引时方便切换。
+    chunk-index: rag-chunk-v1
+    # 单次批量写入的最大条数
+    bulk-size: 200
+    timeout: 10s
+
+  # ---------------- 对话模型 ----------------
+  chat:
+    base-url: https://qianfan.baidubce.com/v2
+    # 对话和向量用的是同一个千帆 API Key。
+    # 这里默认复用 rag.embedding.api-key,而不是再写一遍 ——
+    # 同一份密钥在配置文件里出现两次,改一处漏一处是安全事故的常见来源。
+    api-key: ${rag.embedding.api-key:}
+    model: ernie-4.5-turbo-128k
+    # 温度。事实型问答要的是稳定,同一个问题问两次不该得到完全不同的答案。
+    temperature: 0.2
+    # 检索取几个分块。取太少可能漏掉关键信息,取太多会推高成本和延迟。
+    top-k: 3
+    timeout: 60s
+    max-retries: 2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    cn.ragserver: debug

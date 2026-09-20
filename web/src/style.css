@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+
+/*
+ * 设计令牌 —— 浅色主题。
+ *
+ * 色阶遵循通用约定:**编号越小越浅**。
+ *   ink-50  页面底色
+ *   ink-100 次级底色(输入框、hover)
+ *   ink-200 边框
+ *   ink-400 最弱的辅助文字
+ *   ink-500 次要文字
+ *   ink-900 正文与标题
+ *
+ * 点缀色用紫罗兰,但比深色主题下压深了一档(600 而不是 400)——
+ * 浅色背景上,浅紫的文字对比度不够,看着"发飘"。
+ */
+@theme {
+  --color-ink-50: #f7f8fb;
+  --color-ink-100: #eef0f6;
+  --color-ink-200: #e2e5ee;
+  --color-ink-300: #cdd2e0;
+  /* 400/500 这两档要比深色主题下更克制地压深 ——
+   * 深色背景上浅灰是"优雅",白底上同样的浅灰就变成"发虚"了。
+   * 按 WCAG 的标准,正文对比度要到 4.5:1 才算合格。 */
+  --color-ink-400: #7b8398;
+  --color-ink-500: #5c6478;
+  --color-ink-600: #444c60;
+  --color-ink-700: #3a4159;
+  --color-ink-800: #232a3d;
+  --color-ink-900: #131828;
+
+  --color-accent-400: #8b5cf6;
+  --color-accent-500: #7c3aed;
+  --color-accent-600: #6d28d9;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink-50);
+  color: var(--color-ink-900);
+  font-family:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * 背景里两团很淡的色晕。
+ * 纯白背景看起来太平,加一点渐变立刻有纵深 —— 但浅色主题下必须非常克制,
+ * 稍微浓一点就会显得脏。
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(55rem 36rem at 10% -12%, rgba(124, 58, 237, 0.07), transparent 62%),
+    radial-gradient(48rem 32rem at 96% 4%, rgba(14, 165, 233, 0.06), transparent 62%);
+  z-index: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-300);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-400);
+}
+
+@layer components {
+  /*
+   * 面板:白底 + 细边框 + 很轻的投影。
+   *
+   * 深色主题下靠"半透明模糊"做玻璃感,浅色主题下改用投影来分层 ——
+   * 浅色背景上做玻璃拟态会显得灰扑扑的,不好看。
+   */
+  .panel {
+    background: white;
+    border: 1px solid var(--color-ink-200);
+    border-radius: 1rem;
+    box-shadow:
+      0 1px 2px rgba(19, 24, 40, 0.04),
+      0 8px 24px -12px rgba(19, 24, 40, 0.1);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border-radius: 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.5rem 0.875rem;
+    transition: all 0.16s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-600));
+    color: white;
+    box-shadow: 0 6px 16px -8px var(--color-accent-500);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+
+  .btn-ghost {
+    background: white;
+    color: var(--color-ink-600);
+    border-color: var(--color-ink-200);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--color-ink-100);
+    color: var(--color-ink-900);
+  }
+}
+
+.stream-cursor::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--color-accent-500);
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.22s ease-out both;
+}

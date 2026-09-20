@@ -1,0 +1,164 @@
+# ============================================================
+# RAG 知识库问答项目 · 基础设施编排
+#
+# 一条命令拉起三个中间件:
+#   PostgreSQL(+pgvector) / Elasticsearch / Redis
+#
+# 启动: docker compose up -d
+# 停止: docker compose down          (数据保留)
+# 清空: docker compose down -v       (数据一起删,慎用)
+#
+# 三个服务在同一个默认网络里,互相可以用「服务名」当主机名访问,
+# 比如 Java 代码连数据库时写 postgres:5432(容器内)或 localhost:5432(宿主机)。
+# ============================================================
+
+services:
+
+  # ---------------- 1. PostgreSQL + pgvector ----------------
+  # 为什么用 pgvector/pgvector 而不是官方 postgres 镜像:
+  #   官方镜像里没有 vector 这个数据类型,得自己编译安装扩展;
+  #   这个是 pgvector 官方维护的镜像,扩展已预装,拉下来就能用。
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: rag-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: Asia/Shanghai
+    ports:
+      # 宿主机端口:容器内端口。左边可在 .env 里改,避免和本机已有服务冲突。
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      # 命名卷:容器删掉,数据还在。
+      # 对比绑定挂载(./data:/var/lib/postgresql/data)——绑定挂载在 Windows 上
+      # 有文件权限问题,而且会把数据库文件混进项目目录,所以这里用命名卷。
+      - pgdata:/var/lib/postgresql/data
+      # 初始化脚本目录:仅在「数据卷为空 + 容器首次启动」时自动执行一次。
+      # 后期改了脚本不会重跑,要清空数据卷才会生效。
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------- 2. Elasticsearch 8 ----------------
+  # 第 13 项做混合检索时,这一路负责 BM25 关键词召回。
+  # 现在先起起来,不用急着理解它。
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    container_name: rag-elasticsearch
+    restart: unless-stopped
+    environment:
+      # 单节点模式:跳过集群选主流程,启动更快、更省内存。
+      # 不加这行,ES 会以为要组集群,可能起不来。
+      - discovery.type=single-node
+      # 关闭安全认证。ES 8 默认开启 HTTPS + 账号密码,
+      # Java 客户端不配证书会直接连接失败,开发环境图省事关掉。
+      # 【面试考点】生产环境必须开回来,走 HTTPS + 账号认证。
+      - xpack.security.enabled=false
+      # 限制堆内存。ES 默认按物理内存比例分配,能吃 2G 以上,
+      # 在笔记本上会明显拖慢速度。512m 对学生项目足够。
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - TZ=Asia/Shanghai
+    ports:
+      - "${ES_PORT}:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  # ---------------- 3. Redis ----------------
+  # 第 22 项做重复提问缓存、第 23 项做限流时会用到。
+  redis:
+    image: redis:7-alpine
+    container_name: rag-redis
+    restart: unless-stopped
+    # appendonly yes = 开启 AOF 持久化,每次写操作都记日志,
+    # 容器重启后数据不会丢。默认的 RDB 会在两次快照之间丢数据。
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------- 4. 应用本身 ----------------
+  # 前三个是基础设施,这个是业务服务。
+  # 把应用也放进 Compose 之后,一台干净的机器上执行
+  # `docker compose up -d` 就能跑起完整系统。
+  rag-server:
+    build:
+      # 构建上下文指向 Java 项目目录,而不是项目根目录 ——
+      # 否则整个仓库(含 sample-data、docs)都会被送进 Docker 守护进程,
+      # 既慢又可能把不该进去的文件带进去。
+      context: ./rag-server
+      args:
+        # 基础镜像来源。国内拉不动 Docker Hub 时,
+        # 在 .env 里加一行 DOCKER_REGISTRY=public.ecr.aws/docker/library
+        REGISTRY: ${DOCKER_REGISTRY:-docker.io/library}
+    container_name: rag-server
+    restart: unless-stopped
+    depends_on:
+      # 用 service_healthy 而不是 started:等依赖真正可用再启动,
+      # 否则应用会在 Flyway 连不上数据库时启动失败。
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # 【关键】容器里不能用 localhost 连其他服务 ——
+      # 那指的是容器自己。同一网络里要用「服务名」当主机名。
+      # 好在配置里写的是 ${DB_HOST:localhost} 这种形式,
+      # 容器里传个环境变量就能覆盖,不用改一行代码。
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ES_URI: http://elasticsearch:9200
+      TZ: Asia/Shanghai
+      # 【必须项】激活 local profile。
+      #
+      # application-local.yml 只是被挂载进了容器,Spring Boot 并不会自动读它 ——
+      # 带 profile 的配置文件只有在对应 profile 激活时才生效。
+      # 不放这一行,应用能正常启动(缺密钥不会让它起不来),
+      # 但向量和精排会一直报"未配置",健康检查里也会是 DOWN。
+      SPRING_PROFILES_ACTIVE: local
+    volumes:
+      # 只读挂载本地密钥配置。
+      # 用挂载而不是环境变量,是为了避免同一份密钥在两处维护 ——
+      # 改一处漏一处是安全事故的常见来源。
+      - ./rag-server/application-local.yml:/app/application-local.yml:ro
+      # 上传的原始文档。
+      #
+      # 这里用绑定挂载而不是命名卷,是因为本地开发和容器部署会用**同一份文件**:
+      # 开发时在 IDEA 里跑、上传的文档存在 rag-server/uploads;
+      # 换成容器跑时如果用一个空的命名卷,那些文档的原始文件就找不到了 ——
+      # 查询还能用(分块在数据库里),但一重新索引就会报"文件不存在"。
+      #
+      # 生产环境建议换成命名卷或对象存储 —— 绑定挂载依赖宿主机的目录结构,
+      # 换台机器路径就不对了。
+      - ./rag-server/uploads:/app/uploads
+    ports:
+      - "8080:8080"
+
+# 命名卷声明。Docker 会在自己的存储目录里管理它们,
+# 位置由 Docker Desktop 决定,不在项目目录里。
+volumes:
+  pgdata:
+  esdata:
+  redisdata:
