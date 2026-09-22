@@ -63,6 +63,7 @@ public class ChatStreamService {
     private final CitationBuilder citationBuilder;
     private final QaCacheService cacheService;
     private final FallbackAnswerBuilder fallbackAnswerBuilder;
+    private final DegradationAssembler degradationAssembler;
 
     /**
      * 专门跑流式生成的线程池,由 ThreadPoolConfig 统一配置。
@@ -82,6 +83,7 @@ public class ChatStreamService {
                              CitationBuilder citationBuilder,
                              QaCacheService cacheService,
                              FallbackAnswerBuilder fallbackAnswerBuilder,
+                             DegradationAssembler degradationAssembler,
                              @Qualifier(ThreadPoolConfig.CHAT_STREAM_EXECUTOR)
                              ThreadPoolTaskExecutor executor) {
         this.streamingChatModel = streamingChatModel;
@@ -92,6 +94,7 @@ public class ChatStreamService {
         this.citationBuilder = citationBuilder;
         this.cacheService = cacheService;
         this.fallbackAnswerBuilder = fallbackAnswerBuilder;
+        this.degradationAssembler = degradationAssembler;
         this.executor = executor;
     }
 
@@ -138,6 +141,8 @@ public class ChatStreamService {
                 done.put("citations", hit.citations());
                 done.put("cached", true);
                 done.put("degraded", false);
+                // 降级产物不写缓存,所以命中缓存时清单必然为空
+                done.put("degradations", List.of());
                 done.put("ttftMs", costMs);
                 done.put("totalMs", costMs);
                 send(emitter, "done", done);
@@ -218,6 +223,10 @@ public class ChatStreamService {
             Long savedSessionId = historyService.record(
                     sessionId, question, text, citedChunkIds, (int) totalMs);
 
+            // 和同步链路共用同一套汇总逻辑,避免两条链路对"降级了没有"给出不一致的答案
+            List<AnswerResponse.Degradation> degradations =
+                    degradationAssembler.from(retrieval, modelDegraded);
+
             Map<String, Object> done = new LinkedHashMap<>();
             done.put("sessionId", savedSessionId);
             done.put("answer", text);
@@ -226,14 +235,16 @@ public class ChatStreamService {
             done.put("ttftMs", ttftMs);
             done.put("totalMs", totalMs);
             done.put("cached", false);
-            done.put("degraded", retrieval.rerankDegraded() || modelDegraded);
+            done.put("degraded", !degradations.isEmpty());
+            done.put("degradations", degradations);
             send(emitter, "done", done);
 
             // 同样:降级结果不写缓存(理由见 ChatService)
-            if (retrieval.rerankDegraded() || modelDegraded) {
-                log.warn("本次流式结果是降级产物,不写入缓存");
-            } else {
+            if (degradations.isEmpty()) {
                 cacheService.put(question, text, citations);
+            } else {
+                log.warn("本次流式结果是降级产物,不写入缓存:{}",
+                        degradations.stream().map(AnswerResponse.Degradation::code).toList());
             }
 
             log.info("流式对话完成:检索 {}ms,首字 {}ms,总耗时 {}ms,答案 {} 字",

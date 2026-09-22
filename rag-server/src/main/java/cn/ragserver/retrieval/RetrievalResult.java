@@ -15,9 +15,21 @@ import java.util.List;
  * **降级可以不完美,但不能瞒着。** 标记一路传到响应里,
  * 前端可以据此提示"当前结果未经精排",用户也就有了判断依据。
  */
-public record RetrievalResult(List<RetrievedChunk> chunks, boolean rerankDegraded) {
+public record RetrievalResult(List<RetrievedChunk> chunks,
+                              boolean rerankDegraded,
+                              List<String> failedRecallChannels) {
 
     public static RetrievalResult normal(List<RetrievedChunk> chunks) {
-        return new RetrievalResult(chunks, false);
+        return new RetrievalResult(chunks, false, List.of());
+    }
+
+    /** 召回阶段是否降级(有通道失败) */
+    public boolean recallDegraded() {
+        return !failedRecallChannels.isEmpty();
+    }
+
+    /** 本次检索是否经过任何形式的降级 */
+    public boolean anyDegradation() {
+        return rerankDegraded || recallDegraded();
     }
 }

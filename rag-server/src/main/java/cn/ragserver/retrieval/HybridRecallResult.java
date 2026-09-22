@@ -20,5 +20,27 @@ import java.util.Map;
 public record HybridRecallResult(
         String query,
         int size,
-        Map<String, List<RetrievedChunk>> channels) {
+        Map<String, List<RetrievedChunk>> channels,
+        List<String> failedChannels) {
+
+    /**
+     * 不带通道健康信息的三参数构造。
+     *
+     * 调试接口不关心"哪路挂了"(它本来就只调一路),用这个更省事。
+     */
+    public HybridRecallResult(String query, int size, Map<String, List<RetrievedChunk>> channels) {
+        this(query, size, channels, List.of());
+    }
+
+    /**
+     * 是否有召回通道失败。
+     *
+     * 【这个信息以前被丢掉了】
+     *
+     * 单路召回失败只打了条日志,没有往上传 —— 结果是 ES 挂掉、只走向量召回的请求,
+     * 响应里的 degraded 仍然是 false。**降级可以不完美,但不能瞒着。**
+     */
+    public boolean hasFailedChannel() {
+        return !failedChannels.isEmpty();
+    }
 }

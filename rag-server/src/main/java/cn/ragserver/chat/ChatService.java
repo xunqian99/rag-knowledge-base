@@ -37,6 +37,7 @@ public class ChatService {
     private final CitationBuilder citationBuilder;
     private final QaCacheService cacheService;
     private final FallbackAnswerBuilder fallbackAnswerBuilder;
+    private final DegradationAssembler degradationAssembler;
 
     public ChatService(ChatModel chatModel,
                        ChatProperties properties,
@@ -45,7 +46,8 @@ public class ChatService {
                        ChatHistoryService historyService,
                        CitationBuilder citationBuilder,
                        QaCacheService cacheService,
-                       FallbackAnswerBuilder fallbackAnswerBuilder) {
+                       FallbackAnswerBuilder fallbackAnswerBuilder,
+                       DegradationAssembler degradationAssembler) {
         this.chatModel = chatModel;
         this.properties = properties;
         this.retrievalPipeline = retrievalPipeline;
@@ -54,6 +56,7 @@ public class ChatService {
         this.citationBuilder = citationBuilder;
         this.cacheService = cacheService;
         this.fallbackAnswerBuilder = fallbackAnswerBuilder;
+        this.degradationAssembler = degradationAssembler;
     }
 
     public AnswerResponse ask(QuestionRequest request) {
@@ -77,7 +80,8 @@ public class ChatService {
             Long sessionId = historyService.record(
                     request.sessionId(), question, hit.answer(), citedChunkIds(hit), (int) costMs);
             log.info("命中问答缓存,耗时 {}ms", costMs);
-            return new AnswerResponse(sessionId, hit.answer(), hit.citations(), costMs, false);
+            // 降级产物本来就不会写进缓存,所以命中缓存时清单一定是空的
+            return AnswerResponse.of(sessionId, hit.answer(), hit.citations(), costMs, List.of());
         }
 
         // 1. 完整检索链路:两路召回 -> RRF 融合 -> 精排。
@@ -86,8 +90,9 @@ public class ChatService {
         RetrievalResult retrieval = retrievalPipeline.retrieve(
                 question, Math.max(1, properties.getTopK()));
         List<RetrievedChunk> chunks = retrieval.chunks();
-        // 精排降级也要算进去 —— 这样响应里的 degraded 才覆盖了所有降级路径
-        boolean degraded = retrieval.rerankDegraded();
+        // 大模型是否降级。检索阶段的降级(召回通道失败、精排失败)由 retrieval 自己携带,
+        // 最后统一交给 DegradationAssembler 汇总 —— 这里不用手动合并。
+        boolean chatModelFailed = false;
 
         // 3. 生成。检索为空时直接给出固定回复,不浪费一次模型调用 ——
         //    反正 prompt 里没有任何资料,模型也只能说不知道。
@@ -106,11 +111,15 @@ public class ChatService {
                 // 用户拿到的不是答案,而是"相关内容清单" —— 需要自己读一遍。
                 // 体验确实差,但比一个错误页有价值得多:检索部分已经成功,
                 // 只是最后一步生成失败了,没道理把前面的工作全丢掉。
-                degraded = true;
+                chatModelFailed = true;
                 log.warn("大模型不可用,降级为返回检索到的原文片段:{}", ex.getMessage());
                 answer = fallbackAnswerBuilder.build(chunks);
             }
         }
+
+        // 汇总本次请求踩到的所有降级。空清单 = 完整链路跑完,没有任何环节降级。
+        List<AnswerResponse.Degradation> degradations =
+                degradationAssembler.from(retrieval, chatModelFailed);
 
         // 4. 组装候选引用。编号必须和 prompt 里的 [1][2] 严格对应。
         //    这套逻辑和流式链路共用 CitationBuilder,避免两边判断不一致 ——
@@ -140,13 +149,14 @@ public class ChatService {
         //
         // 缓存的前提是"这份结果在一段时间内是正确的"。
         // 降级产物恰恰不满足这个前提,它的正确性取决于一个临时故障何时恢复。
-        if (degraded) {
-            log.warn("本次结果是降级产物,不写入缓存");
-        } else {
+        if (degradations.isEmpty()) {
             cacheService.put(question, answer, citations);
+        } else {
+            log.warn("本次结果是降级产物,不写入缓存:{}",
+                    degradations.stream().map(AnswerResponse.Degradation::code).toList());
         }
 
-        return new AnswerResponse(sessionId, answer, citations, costMs, degraded);
+        return AnswerResponse.of(sessionId, answer, citations, costMs, degradations);
     }
 
     private static Long[] citedChunkIds(CachedAnswer cached) {

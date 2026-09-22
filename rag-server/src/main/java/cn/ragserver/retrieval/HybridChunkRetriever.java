@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,9 @@ public class HybridChunkRetriever {
 
     public HybridRecallResult recall(String query, int size) {
         Map<String, List<RetrievedChunk>> channels = new LinkedHashMap<>();
+        // 记录哪几路挂了。以前只打日志不上报,导致"ES 挂了"这种情况
+        // 在响应里看起来和一切正常没有区别。
+        List<String> failedChannels = new ArrayList<>();
         long start = System.nanoTime();
         int failed = 0;
 
@@ -67,6 +71,7 @@ public class HybridChunkRetriever {
                 // 比如 Elasticsearch 挂了就只用向量召回,反过来也一样。
                 // 答案质量会下降,但「稍差一点的答案」远好过「直接报错」。
                 failed++;
+                failedChannels.add(retriever.name());
                 channels.put(retriever.name(), List.of());
                 log.warn("召回[{}] 不可用,该路跳过,继续用其余通道:{}",
                         retriever.name(), ex.getMessage());
@@ -80,6 +85,6 @@ public class HybridChunkRetriever {
 
         log.info("多路召回完成({} 路失败),总耗时 {}ms",
                 failed, (System.nanoTime() - start) / 1_000_000);
-        return new HybridRecallResult(query, size, channels);
+        return new HybridRecallResult(query, size, channels, List.copyOf(failedChannels));
     }
 }

@@ -42,8 +42,11 @@ for index, question in enumerate(QUESTIONS, 1):
         result = ask(question)
         files = "、".join(sorted({c["fileName"] for c in result.get("citations", [])})) or "无"
         flags = []
-        if result.get("degraded"):
-            flags.append("降级")
+        # 打印具体的降级 code,而不是笼统一个"降级"字 ——
+        # 只看到"降级了"还得回去翻日志才知道是哪一环,这个工具就白做了。
+        # 用 .get(..., []) 兜底是为了兼容老版本后端(那时还没有这个字段)。
+        for item in result.get("degradations") or []:
+            flags.append(f"降级[{item.get('code', '?')}]")
         print(f"[{index}] 问:{question}")
         print(f"    答:{result['answer']}")
         print(f"    来源:{files}  耗时:{result['costMs']}ms {' '.join(flags)}")

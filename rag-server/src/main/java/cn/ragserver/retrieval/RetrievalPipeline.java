@@ -73,6 +73,7 @@ public class RetrievalPipeline {
                 (System.nanoTime() - start) / 1_000_000,
                 degraded ? "[精排已降级]" : "");
 
-        return new RetrievalResult(reranked, degraded);
+        // 把召回通道的失败情况一路带上 —— 响应里的降级清单要靠它
+        return new RetrievalResult(reranked, degraded, recall.failedChannels());
     }
 }

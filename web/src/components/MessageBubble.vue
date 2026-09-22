@@ -25,6 +25,20 @@ const hasMetrics = computed(
   () => props.message.meta.ttftMs != null || props.message.meta.totalMs != null,
 )
 
+const degradations = computed(() => props.message.meta.degradations ?? [])
+
+/** 每种降级的短标签。message 太长,不适合直接塞进标记里 —— 放进 title 提示 */
+const DEGRADATION_LABELS: Record<string, string> = {
+  CHAT_MODEL_UNAVAILABLE: '模型不可用',
+  RERANK_UNAVAILABLE: '未经精排',
+  RECALL_CHANNEL_DOWN: '召回范围缩小',
+}
+
+function degradationLabel(code: string) {
+  // 遇到没见过的 code 也给一个兜底文案,不要显示成空白标记
+  return DEGRADATION_LABELS[code] ?? '结果已降级'
+}
+
 function ms(value?: number) {
   if (value == null) return '—'
   return value >= 1000 ? `${(value / 1000).toFixed(2)}s` : `${value}ms`
@@ -60,12 +74,23 @@ function ms(value?: number) {
           降级标记要显眼。
           用户有权知道自己看到的结果是"完整链路跑出来的"还是"降级产物" ——
           后端一路把这个标记传上来,前端就不能把它藏起来。
+
+          按"降级项"逐个渲染,而不是一个笼统的「已降级」:
+          精排失败时答案还是答案,大模型失败时返回的根本不是答案 ——
+          前者是次要提示,后者要立刻让用户改变预期,所以颜色也分两级。
         -->
         <span
-          v-if="message.meta.degraded"
-          class="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-600 ring-1 ring-amber-500/25"
+          v-for="item in degradations"
+          :key="item.code"
+          :title="item.message"
+          class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] ring-1"
+          :class="
+            item.code === 'CHAT_MODEL_UNAVAILABLE'
+              ? 'bg-amber-500/10 text-amber-600 ring-amber-500/25'
+              : 'bg-ink-500/10 text-ink-600 ring-ink-500/25'
+          "
         >
-          <CircleAlert class="size-3" /> 结果已降级
+          <CircleAlert class="size-3" /> {{ degradationLabel(item.code) }}
         </span>
       </div>
 

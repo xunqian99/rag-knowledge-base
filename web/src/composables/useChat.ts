@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { api } from '../api/client'
-import type { Citation } from '../api/types'
+import type { Citation, Degradation } from '../api/types'
 
 export interface ChatMessageMeta {
   retrievalMs?: number
@@ -8,6 +8,8 @@ export interface ChatMessageMeta {
   totalMs?: number
   cached?: boolean
   degraded?: boolean
+  /** 降级清单。渲染成一个个标记,而不是笼统的"已降级" */
+  degradations?: Degradation[]
 }
 
 export interface ChatMessage {
@@ -90,6 +92,7 @@ export function useChat() {
               ttftMs: result.ttftMs,
               cached: result.cached,
               degraded: result.degraded,
+              degradations: result.degradations ?? [],
             }
             if (result.sessionId != null) {
               sessionId.value = result.sessionId
