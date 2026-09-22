@@ -68,6 +68,16 @@ public class EvaluationMain {
             Map<RetrievalMode, EvaluationMetrics> results = runner.runAll(questions, modes);
 
             String report = EvaluationRunner.renderReport(results);
+
+            // 拒答阈值校准只在包含「混合+精排」时跑 —— 它测的是精排分数的分布,
+            // 换成别的配置这个阈值没有意义。
+            // 另外它要给全部 150 道题(含不可回答型)各跑一次检索,不是免费的,
+            // 所以调参实验那种只跑单一配置的场景不会带上它。
+            if (modes.contains(RetrievalMode.HYBRID_RERANK)) {
+                RefusalCalibration calibration = context.getBean(RefusalCalibration.class);
+                report = report + RefusalCalibration.renderMarkdown(calibration.calibrate(questions));
+            }
+
             System.out.println();
             System.out.println(report);
 

@@ -206,6 +206,8 @@ public class EvaluationRunner {
     public static String renderReport(Map<RetrievalMode, EvaluationMetrics> results) {
         StringBuilder sb = new StringBuilder();
         sb.append("# 检索效果评测报告\n\n");
+        sb.append("> 这是**机器生成的指标快照**,重跑评测会整份覆盖。\n");
+        sb.append("> 人写的分析、已知局限与结论在 [analysis.md](analysis.md),两份对照着看。\n\n");
 
         sb.append("## 总体\n\n");
         sb.append("| 配置 | 题目数 | 命中数 | Hit@1 | Hit@").append(TOP_K).append(" | MRR |\n");
