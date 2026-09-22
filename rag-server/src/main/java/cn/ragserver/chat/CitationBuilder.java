@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -58,12 +58,21 @@ public class CitationBuilder {
     /**
      * 从答案正文里解析出 [1][2] 这类标记,只返回被点到的引用。
      *
-     * 用 LinkedHashSet 是为了既去重、又保持出现顺序 ——
-     * 答案里先提到 [2] 再提到 [1],返回的引用列表也该是这个顺序。
+     * 【返回顺序是「编号升序」,不是「答案里出现的顺序」】
+     *
+     * 解析出来的编号装进 Set 只是为了去重;最后的过滤是遍历 candidates,
+     * 而 candidates 本身就是 1..N 升序的,所以输出必然也是升序。
+     * 答案里写 "[2][1]",返回的列表仍然是 [1, 2]。
+     *
+     * 这样反而更好:返回顺序和 prompt 里的编号顺序一致,用户核对起来更顺。
+     *
+     * (原先这里用的是 LinkedHashSet,注释还写着"保持答案里出现的顺序" ——
+     *  但那个顺序在最后一步被丢掉了,注释和实现对不上。现在换成 HashSet,
+     *  让"只用来去重"这件事在代码上也是显式的。)
      */
     public List<AnswerResponse.Citation> keepCitedOnly(
             List<AnswerResponse.Citation> candidates, String answer) {
-        Set<Integer> usedIndexes = new LinkedHashSet<>();
+        Set<Integer> usedIndexes = new HashSet<>();
         Matcher matcher = CITATION_MARKER.matcher(answer == null ? "" : answer);
         while (matcher.find()) {
             usedIndexes.add(Integer.parseInt(matcher.group(1)));

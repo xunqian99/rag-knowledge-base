@@ -39,6 +39,21 @@ function degradationLabel(code: string) {
   return DEGRADATION_LABELS[code] ?? '结果已降级'
 }
 
+/**
+ * 引用里那个分数的名字要跟着精排状态变。
+ *
+ * 因为 RetrievalChunk 的 score 含义取决于它是哪一步产出的:
+ *   精排正常 -> Cross-encoder 打的相关度,0~1
+ *   精排降级 -> RRF 融合分,0.0X 量级
+ *
+ * 同一个"相关度"标签配两个量纲完全不同的数字,用户会把 0.032 读成"这条很不相关",
+ * 其实那只是融合分的正常量级。所以降级时换个说法。
+ */
+const rerankDegraded = computed(() =>
+  degradations.value.some((d) => d.code === 'RERANK_UNAVAILABLE'),
+)
+const scoreLabel = computed(() => (rerankDegraded.value ? '融合分' : '相关度'))
+
 function ms(value?: number) {
   if (value == null) return '—'
   return value >= 1000 ? `${(value / 1000).toFixed(2)}s` : `${value}ms`
@@ -138,7 +153,9 @@ function ms(value?: number) {
               <div class="flex items-center gap-2 text-[11px]">
                 <span class="truncate font-medium text-ink-800">{{ citation.fileName }}</span>
                 <span class="shrink-0 text-ink-400">第 {{ citation.chunkIndex }} 块</span>
-                <span class="shrink-0 text-ink-400">相关度 {{ citation.score.toFixed(3) }}</span>
+                <span class="shrink-0 text-ink-400">
+                  {{ scoreLabel }} {{ citation.score.toFixed(3) }}
+                </span>
               </div>
               <p class="mt-0.5 line-clamp-2 text-[11px] leading-relaxed text-ink-500">
                 {{ citation.snippet }}
