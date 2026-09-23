@@ -41,7 +41,8 @@ public class RerankProperties {
      */
     private int candidateLimit = 20;
 
-    private Duration timeout = Duration.ofSeconds(30);
+    /** 单次调用超时。正常精排只要 300~500ms,15s 已经很宽松。 */
+    private Duration timeout = Duration.ofSeconds(15);
 
     /**
      * 失败重试次数。

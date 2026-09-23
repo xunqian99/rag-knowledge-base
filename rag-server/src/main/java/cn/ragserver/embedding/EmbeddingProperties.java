@@ -30,7 +30,8 @@ public class EmbeddingProperties {
     private int batchSize = 16;
 
     /** 单次请求超时。向量化是外部调用,必须设超时,不能无限等。 */
-    private Duration timeout = Duration.ofSeconds(30);
+    /** 单次调用超时。15s × 3 次尝试 = 45s,整段检索才不会挤爆外层的连接超时。 */
+    private Duration timeout = Duration.ofSeconds(15);
 
     /** 失败重试次数。网络抖动导致的偶发失败,重试一次通常就好了。 */
     private int maxRetries = 2;

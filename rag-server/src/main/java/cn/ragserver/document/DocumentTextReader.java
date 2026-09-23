@@ -140,13 +140,21 @@ public class DocumentTextReader {
      * 直接传字节、让 Tika 自己判断,更安全也更简单。
      */
     private String parseWithTika(byte[] bytes, String fileName) {
-        // maxLength 用 int,把配置的 long 上限收窄一下
-        int maxChars = (int) Math.min(properties.getMaxTextLength(), Integer.MAX_VALUE);
+        long limit = properties.getMaxTextLength();
+        // 【多要一个字符,把「被截断」和「正好等于上限」区分开】
+        //
+        // Tika 在达到 maxLength 时会停止抽取并返回已解析的部分。所以如果只传
+        // maxLength,拿回来的长度**永远不可能超过它** —— 下面那个
+        // 「长度 > 上限就报错」的判断在这条路上永远不会成立,
+        // 超长文档会被静默截断成前几百万字,而用户完全不知道。
+        // 多要一个字符之后:拿回来超过上限,就说明确实是被截断的。
+        int maxChars = (int) Math.min(limit + 1, Integer.MAX_VALUE);
 
+        String parsed;
         try (InputStream in = new ByteArrayInputStream(bytes)) {
             // 传 maxLength 是让 Tika 在读到上限时就停下并返回已解析的部分,
             // 而不是把整个文件读进内存后再判断 —— 后者对解压炸弹毫无防备。
-            return tika.parseToString(in, new org.apache.tika.metadata.Metadata(), maxChars);
+            parsed = tika.parseToString(in, new org.apache.tika.metadata.Metadata(), maxChars);
         } catch (Exception ex) {
             // 解析失败的原因可能很多(文件损坏、加密、格式伪装),
             // 这些属于用户输入问题,返回 400 而不是 500。
@@ -154,6 +162,14 @@ public class DocumentTextReader {
             throw new BusinessException("PARSE_FAILED",
                     "文件解析失败,可能是文件损坏或格式不受支持:" + ex.getMessage(), ex);
         }
+
+        // 这一步必须放在 catch 外面 —— 否则会被上面那个 catch 包成 PARSE_FAILED,
+        // 用户看到的就不是「文本超长,请拆分」而是「文件解析失败」。
+        if (parsed.length() > limit) {
+            throw new BusinessException("TEXT_TOO_LONG",
+                    "解析出的文本超过上限 " + limit + " 字符,请拆分后再上传");
+        }
+        return parsed;
     }
 
     private void checkLength(String text, String fileName) {
